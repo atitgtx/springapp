@@ -1,0 +1,30 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: springapp
+  labels:
+    name: springapp
+spec:
+  containers:
+  - name: springapp
+    image: atitgt/springapp:v1  
+    resources:
+      limits:
+        memory: "512Mi"
+        cpu: "500m"
+    ports:
+      - containerPort: 8080
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: myapp-pod
+  labels:
+    app: myapp
+    type: front-end
+spec:
+  containers:
+    - name: springapp-container
+      image: atitgt/springapp:v1
+      ports:
+        - containerPort: 8080

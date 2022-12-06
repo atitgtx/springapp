@@ -1,0 +1,54 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mysqldb
+  labels:
+    app: studentdb
+spec:
+  replicas: 1
+  #node-selector
+  #starategy: recreate/RollingUpdate
+  selector:
+    matchLabels:
+      app: dstudentdbb
+  template:
+    metadata:
+      name: mysqldb
+      labels:
+        app: studentdb
+    spec:
+      containers:
+        - name: mysqldb-container
+          image: mysql:8.0.1
+          ports:
+            - containerPort: 3306
+          env:
+            - name: MYSQL_ROOT_PASSWORD
+              value: root@123
+            - name: MYSQL_USER
+              value: shivang
+            - name: MYSQL_PASSWORD
+              value: shivang@123
+            - name: MYSQL_DATABASE
+              value: studentdb
+          resources:
+            requests:
+              cpu: 1000m
+              memory: "1024Mi"
+            limits:
+              cpu: 2000m
+              memory: "2048Mi"
+---             
+apiVersion: v1
+kind: Service
+metadata:
+  name: mysqlstuddbservice
+spec:
+  type: ClusterIP
+  selector:
+    app: studentdb
+  ports:
+  - port: 5000
+    targetPort: 3306
+
+
